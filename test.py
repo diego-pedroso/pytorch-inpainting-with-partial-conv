@@ -15,7 +15,7 @@ parser.add_argument('--snapshot', type=str, default='')
 parser.add_argument('--image_size', type=int, default=256)
 args = parser.parse_args()
 
-device = torch.device('cuda')
+device = torch.device('cpu')
 
 size = (args.image_size, args.image_size)
 img_transform = transforms.Compose(
@@ -24,10 +24,10 @@ img_transform = transforms.Compose(
 mask_transform = transforms.Compose(
     [transforms.Resize(size=size), transforms.ToTensor()])
 
-dataset_val = Places2(args.root, img_transform, mask_transform, 'val')
+dataset_val = Places2(args.root, './mask', img_transform, mask_transform, 'val')
 
 model = PConvUNet().to(device)
-load_ckpt(args.snapshot, [('model', model)])
+load_ckpt(args.snapshot, [('model', model)], device=device)
 
 model.eval()
 evaluate(model, dataset_val, device, 'result.jpg')
