@@ -18,14 +18,16 @@ class Places2(torch.utils.data.Dataset):
         else:
             self.paths = glob('{:s}/{:s}_large/*'.format(img_root, split))
 
-        self.mask_paths = glob('{:s}/*.jpg'.format(mask_root))
+        # self.mask_paths = glob('{:s}/*.jpg'.format(mask_root))
+        self.mask_paths = glob('{:s}/*.png'.format(mask_root))
         self.N_mask = len(self.mask_paths)
 
     def __getitem__(self, index):
         gt_img = Image.open(self.paths[index])
         gt_img = self.img_transform(gt_img.convert('RGB'))
 
-        mask = Image.open(self.mask_paths[random.randint(0, self.N_mask - 1)])
+        # mask = Image.open(self.mask_paths[random.randint(0, self.N_mask - 1)])
+        mask = Image.open(self.mask_paths[index])
         mask = self.mask_transform(mask.convert('RGB'))
         return gt_img * mask, mask, gt_img
 

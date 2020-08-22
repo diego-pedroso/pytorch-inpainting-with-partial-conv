@@ -16,7 +16,7 @@ parser.add_argument('--snapshot', type=str, default='')
 parser.add_argument('--image_size', type=int, default=256)
 parser.add_argument('--width', type=int)
 parser.add_argument('--height', type=int)
-parser.add_argument('--cpu', type=boolean, default=False)
+parser.add_argument('--cpu', type=bool, default=False)
 
 args = parser.parse_args()
 
