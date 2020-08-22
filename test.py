@@ -14,21 +14,36 @@ parser.add_argument('--root', type=str)
 parser.add_argument('--masks_path', type=str)
 parser.add_argument('--snapshot', type=str, default='')
 parser.add_argument('--image_size', type=int, default=256)
+parser.add_argument('--width', type=int)
+parser.add_argument('--height', type=int)
+parser.add_argument('--cpu', type=boolean, default=False)
+
 args = parser.parse_args()
 
-device = torch.device('cpu')
+if args.cpu:
+  device = torch.device('cpu')
+else:
+  device = torch.device('cuda')
 
+width = args.width or args.image_size
+height = args.height or args.image_size
 size = (args.image_size, args.image_size)
+
 img_transform = transforms.Compose(
     [transforms.Resize(size=size), transforms.ToTensor(),
      transforms.Normalize(mean=opt.MEAN, std=opt.STD)])
 mask_transform = transforms.Compose(
     [transforms.Resize(size=size), transforms.ToTensor()])
 
-dataset_val = Places2(args.root, args.masks_path, img_transform, mask_transform, 'val')
+# dataset_val = Places2(args.root, args.masks_path, img_transform, mask_transform, 'val')
+dataset_val = Places2(args.root, args.masks_path, img_transform, mask_transform, 'test')
 
 model = PConvUNet().to(device)
-load_ckpt(args.snapshot, [('model', model)], device=device)
+
+if args.cpu:
+  load_ckpt(args.snapshot, [('model', model)], device=device)
+else:
+  load_ckpt(args.snapshot, [('model', model)])
 
 model.eval()
 evaluate(model, dataset_val, device, 'result.jpg')
