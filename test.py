@@ -27,7 +27,7 @@ else:
 
 width = args.width or args.image_size
 height = args.height or args.image_size
-size = (args.image_size, args.image_size)
+size = (height, width)
 
 img_transform = transforms.Compose(
     [transforms.Resize(size=size), transforms.ToTensor(),
