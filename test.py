@@ -3,7 +3,7 @@ import torch
 from torchvision import transforms
 
 import opt
-from places2 import Places2
+from places2_paired_masks import Places2
 from evaluation import evaluate
 from net import PConvUNet
 from util.io import load_ckpt
