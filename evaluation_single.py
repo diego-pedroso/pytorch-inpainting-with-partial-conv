@@ -33,7 +33,6 @@ def evaluate(model, dataset, device, output_folder):
     output_path = '{}/{}'.format(output_folder, img_name)
     save_image(unnormalized_output, output_path)
 
-    break
 
 
 # import torch
