@@ -2,6 +2,7 @@ import random
 import torch
 from PIL import Image
 from glob import glob
+import os
 
 
 class Places2(torch.utils.data.Dataset):
@@ -29,7 +30,8 @@ class Places2(torch.utils.data.Dataset):
         # mask = Image.open(self.mask_paths[random.randint(0, self.N_mask - 1)])
         mask = Image.open(self.mask_paths[index])
         mask = self.mask_transform(mask.convert('RGB'))
-        return gt_img * mask, mask, gt_img
+        img_name = os.path.basename(self.paths[index])
+        return gt_img * mask, mask, gt_img, img_name
 
     def __len__(self):
         return len(self.paths)

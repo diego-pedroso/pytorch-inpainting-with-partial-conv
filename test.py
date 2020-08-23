@@ -4,13 +4,14 @@ from torchvision import transforms
 
 import opt
 from places2_paired_masks import Places2
-from evaluation import evaluate
+from evaluation_single import evaluate
 from net import PConvUNet
 from util.io import load_ckpt
 
 parser = argparse.ArgumentParser()
 # training options
 parser.add_argument('--root', type=str)
+parser.add_argument('--output_folder', type=str, required=True)
 parser.add_argument('--masks_path', type=str)
 parser.add_argument('--snapshot', type=str, default='')
 parser.add_argument('--image_size', type=int, default=256)
@@ -46,4 +47,4 @@ else:
   load_ckpt(args.snapshot, [('model', model)])
 
 model.eval()
-evaluate(model, dataset_val, device, 'result.jpg')
+evaluate(model, dataset_val, device, args.output_folder)
